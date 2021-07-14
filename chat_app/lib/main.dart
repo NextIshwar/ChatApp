@@ -1,12 +1,15 @@
+import 'package:chat_app/home/home_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'common/chat_imports.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  runApp(
+    const MyApp(),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -19,29 +22,65 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomePage('Welcome'),
+      home: HomePage(),
     );
   }
 }
 
 class HomePage extends StatefulWidget {
-  final String title;
-  HomePage(this.title);
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  List<String>? token;
+  @override
+  void initState() async {
+    super.initState();
+    token = await SharedPreference.getToken();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(extendBody: true,body: Container(
-      child: Column(children: [
-        Expanded(child: Container(
-          alignment: Alignment.center,
-          child: Text("Welcome to ChatBot"),
-        ),flex: 1,),
-        Expanded(child: LoginPage(), flex: 3,),
-      ],),
-    ));
+    return Scaffold(
+      extendBody: true,
+      body: Container(
+        child: Column(
+          children: [
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.green.withOpacity(0.5),
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey,
+                      offset: Offset(0, -1),
+                      blurRadius: 3,
+                      spreadRadius: 3,
+                    )
+                  ],
+                ),
+                clipBehavior: Clip.antiAlias,
+                alignment: Alignment.center,
+                child: Text(
+                  "Welcome to ChatBot",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                ),
+              ),
+              flex: 2,
+            ),
+            Expanded(
+              child: (token != null)
+                  ? UserScreen(
+                      token: token,
+                    )
+                  : LoginPage(),
+              flex: 5,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
