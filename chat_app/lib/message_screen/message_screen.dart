@@ -48,7 +48,7 @@ class MessageScreen extends StatelessWidget {
 
 class MessageBody extends StatefulWidget {
   final String chatId, senderName;
-  MessageBody({this.chatId = "", this.senderName=""});
+  MessageBody({this.chatId = "", this.senderName = ""});
   @override
   _MessageBodyState createState() => _MessageBodyState();
 }
@@ -81,7 +81,10 @@ class _MessageBodyState extends State<MessageBody> {
                     itemBuilder: (context, index) => Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
-                        alignment: (data[index]['senderName']==widget.senderName)?Alignment.bottomRight:Alignment.bottomLeft,
+                        alignment:
+                            (data[index]['senderName'] == widget.senderName)
+                                ? Alignment.bottomRight
+                                : Alignment.bottomLeft,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [

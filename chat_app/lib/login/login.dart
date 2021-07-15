@@ -39,11 +39,20 @@ class _LoginPageState extends State<LoginPage> {
                 });
                 print(user);
                 var token = await user.getIdToken();
-                SharedPreference.addToken(token: token,userName: user.displayName,email: user.email);
+                SharedPreference.addToken(
+                    token: token,
+                    userName: user.displayName,
+                    email: user.email);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => UserScreen(token: [user.email??"",user.displayName??"",user.email??""],),
+                    builder: (context) => UserScreen(
+                      token: [
+                        user.email ?? "",
+                        user.displayName ?? "",
+                        user.email ?? ""
+                      ],
+                    ),
                   ),
                 );
               }

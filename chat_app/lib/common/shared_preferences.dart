@@ -10,7 +10,7 @@ class SharedPreference {
 
   static void addToken({String token = "", userName, email}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setStringList("token", [token,userName,email]);
+    prefs.setStringList("token", [token, userName, email]);
   }
 
   static Future<List<String>?> getToken() async {
@@ -20,8 +20,4 @@ class SharedPreference {
   }
 }
 
-enum userInfo{
-  token,
-  userName,
-  email
-}
+enum userInfo { token, userName, email }

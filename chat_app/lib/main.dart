@@ -55,8 +55,10 @@ class _HomePageState extends State<HomePage> {
     if (isLoading) {
       return Center(child: CircularProgressIndicator());
     }
-    return (token!=null)
-        ? UserScreen(token: token,)
+    return (token != null)
+        ? UserScreen(
+            token: token,
+          )
         : Scaffold(
             extendBody: true,
             body: Container(

@@ -55,7 +55,7 @@ class UserScreen extends StatelessWidget {
                               result.data?['User_users_aggregate']['nodes']
                                   [index]['email'],
                             ),
-                            senderName: token?[userInfo.userName.index]??"",
+                            senderName: token?[userInfo.userName.index] ?? "",
                           ),
                         ),
                       );
@@ -67,8 +67,11 @@ class UserScreen extends StatelessWidget {
                         color: Colors.yellow.withOpacity(0.5),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Text(result.data?['User_users_aggregate']['nodes']
-                          [index]['name'],style: TextStyle(fontWeight: FontWeight.bold),),
+                      child: Text(
+                        result.data?['User_users_aggregate']['nodes'][index]
+                            ['name'],
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                 ),
