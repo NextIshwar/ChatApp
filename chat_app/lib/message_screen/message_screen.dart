@@ -15,6 +15,7 @@ class MessageScreen extends StatelessWidget {
     return Scaffold(
       extendBody: true,
       appBar: AppBar(
+        backgroundColor: Colors.green.withOpacity(0.5),
         title: Center(
           child: Text(
             "$receiverName",
@@ -80,23 +81,30 @@ class _MessageBodyState extends State<MessageBody> {
                 ? ListView.builder(
                     itemBuilder: (context, index) => Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        alignment:
-                            (data[index]['senderName'] == widget.senderName)
-                                ? Alignment.bottomRight
-                                : Alignment.bottomLeft,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              data[index]['senderName'],
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(data[index]['msg'])
-                          ],
+                      child: Material(
+                        elevation: 5.0,
+                        child: Container(
+                          color:
+                              (data[index]['senderName'] == widget.senderName)
+                                  ? Colors.grey
+                                  : Colors.green,
+                          alignment:
+                              (data[index]['senderName'] == widget.senderName)
+                                  ? Alignment.bottomRight
+                                  : Alignment.bottomLeft,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                data[index]['senderName'],
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(data[index]['msg'])
+                            ],
+                          ),
                         ),
                       ),
                     ),

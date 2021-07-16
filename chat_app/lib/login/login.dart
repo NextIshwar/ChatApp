@@ -20,45 +20,58 @@ class _LoginPageState extends State<LoginPage> {
           options: MutationOptions(
             document: gql(Queries.insertUser),
           ),
-          builder: (runMutation, result) => ElevatedButton.icon(
-            style: ElevatedButton.styleFrom(
-              primary: Colors.black.withOpacity(0.5),
-              onPrimary: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            onPressed: () async {
-              User? user =
-                  await Authentication.signInWithGoogle(context: context);
-              if (user != null) {
-                runMutation(<String, dynamic>{
-                  "name": user.displayName,
-                  "email": user.email,
-                  "id": user.email
-                });
-                print(user);
-                var token = await user.getIdToken();
-                SharedPreference.addToken(
-                    token: token,
-                    userName: user.displayName,
-                    email: user.email);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => UserScreen(
-                      token: [
-                        user.email ?? "",
-                        user.displayName ?? "",
-                        user.email ?? ""
-                      ],
-                    ),
+          builder: (runMutation, result) => Column(
+            children: [
+              ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.black.withOpacity(0.5),
+                  onPrimary: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                );
-              }
-            },
-            icon: Icon(Icons.email),
-            label: Text("Sign in with google"),
+                ),
+                onPressed: () async {
+                  User? user =
+                      await Authentication.signInWithGoogle(context: context);
+                  if (user != null) {
+                    runMutation(<String, dynamic>{
+                      "name": user.displayName,
+                      "email": user.email,
+                      "id": user.email
+                    });
+                    print(user);
+                    var token = await user.getIdToken();
+                    SharedPreference.addToken(
+                        token: token,
+                        userName: user.displayName,
+                        email: user.email);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => UserScreen(
+                          token: [
+                            user.email ?? "",
+                            user.displayName ?? "",
+                            user.email ?? ""
+                          ],
+                        ),
+                      ),
+                    );
+                  }
+                },
+                icon: Icon(Icons.email),
+                label: Text("Sign in with google"),
+              ),
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                  child: Text(
+                    "Press to sign up",
+                  ),
+                  onPressed: () {},
+                ),
+              )
+            ],
           ),
         ),
       ),
