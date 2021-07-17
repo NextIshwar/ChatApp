@@ -15,31 +15,53 @@ class MessageScreen extends StatelessWidget {
     return Scaffold(
       extendBody: true,
       appBar: AppBar(
-        backgroundColor: Colors.green.withOpacity(0.5),
-        title: Center(
-          child: Text(
-            "$receiverName",
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
-          ),
-        ),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: MessageBody(
-              chatId: chatId,
-              senderName: senderName,
+        backgroundColor: Colors.teal[900],
+        title: Row(
+          children: [
+            Icon(
+              Icons.account_circle,
+              size: 30.0,
             ),
-            flex: 10,
+            SizedBox(
+              width: 5,
+            ),
+            Text(
+              "$receiverName",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18),
+            ),
+          ],
+        ),
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(right: 20.0),
+            child: Icon(Icons.video_call),
           ),
-          Expanded(
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: Icon(Icons.call),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: Icon(Icons.more_vert),
+          ),
+        ],
+      ),
+      body: Stack(
+        children: [
+          MessageBody(
+            chatId: chatId,
+            senderName: senderName,
+          ),
+          Positioned(
+            bottom: 0,
             child: WriteMessage(
               chatId: chatId,
               senderName: senderName,
               receiverName: receiverName,
             ),
-            flex: 1,
           ),
         ],
       ),
@@ -57,6 +79,8 @@ class MessageBody extends StatefulWidget {
 class _MessageBodyState extends State<MessageBody> {
   @override
   Widget build(BuildContext context) {
+    final double height = MediaQuery.of(context).size.height;
+    final double width = MediaQuery.of(context).size.width;
     return GraphQLProvider(
       client: Config.initailizeClient(),
       child: Subscription(
@@ -72,46 +96,36 @@ class _MessageBodyState extends State<MessageBody> {
           }
           var data = result.data?['channel_chat_aggregate']['nodes'];
           var noOfData = data.length;
-          return Container(
-            alignment: Alignment.bottomLeft,
-            decoration: BoxDecoration(
-              color: Colors.green.withOpacity(0.2),
-            ),
-            child: (noOfData > 0)
-                ? ListView.builder(
-                    itemBuilder: (context, index) => Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Material(
-                        elevation: 5.0,
-                        child: Container(
-                          color:
-                              (data[index]['senderName'] == widget.senderName)
-                                  ? Colors.grey
-                                  : Colors.green,
-                          alignment:
-                              (data[index]['senderName'] == widget.senderName)
-                                  ? Alignment.bottomRight
-                                  : Alignment.bottomLeft,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(
-                                data[index]['senderName'],
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(data[index]['msg'])
-                            ],
-                          ),
-                        ),
-                      ),
+          return (noOfData > 0)
+              ? ListView.builder(
+                  itemBuilder: (context, index) => Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment:
+                          data[index]['senderName'] == widget.senderName
+                              ? CrossAxisAlignment.end
+                              : CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color:
+                                  data[index]['senderName'] == widget.senderName
+                                      ? Colors.teal[900]
+                                      : Colors.blueGrey[900],
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              data[index]['msg'],
+                              style: TextStyle(color: Colors.white),
+                            ))
+                      ],
                     ),
-                    itemCount: noOfData,
-                  )
-                : SizedBox(),
-          );
+                  ),
+                  itemCount: noOfData,
+                )
+              : SizedBox();
         },
       ),
     );
@@ -139,21 +153,38 @@ class _WriteMessageState extends State<WriteMessage> {
             padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
-                SizedBox(
-                  height: 100,
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  child: TextFormField(
-                    controller: msgController,
-                    decoration: InputDecoration(
-                      hintText: "Type a message",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+                Stack(
+                  alignment: Alignment.topCenter,
+                  children: [
+                    SizedBox(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: TextFormField(
+                        controller: msgController,
+                        decoration: InputDecoration(
+                          hintText: "Type a message",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                SizedBox(
-                  width: 5,
+                    Positioned(
+                      right: 10,
+                      child: Row(
+                        children: [
+                          IconButton(
+                            onPressed: () {},
+                            icon: Icon(Icons.attach_file),
+                          ),
+                          IconButton(
+                            onPressed: () {},
+                            icon: Icon(Icons.camera_alt),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
                 ),
                 IconButton(
                   onPressed: () {
@@ -166,7 +197,7 @@ class _WriteMessageState extends State<WriteMessage> {
                     msgController.clear();
                   },
                   icon: Icon(Icons.send),
-                )
+                ),
               ],
             ),
           ),
