@@ -145,6 +145,7 @@ class _WriteMessageState extends State<WriteMessage> {
                   child: TextFormField(
                     controller: msgController,
                     decoration: InputDecoration(
+                      hintText: "Type a message",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
