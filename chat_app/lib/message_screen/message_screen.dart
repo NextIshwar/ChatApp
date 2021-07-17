@@ -79,8 +79,6 @@ class MessageBody extends StatefulWidget {
 class _MessageBodyState extends State<MessageBody> {
   @override
   Widget build(BuildContext context) {
-    final double height = MediaQuery.of(context).size.height;
-    final double width = MediaQuery.of(context).size.width;
     return GraphQLProvider(
       client: Config.initailizeClient(),
       child: Subscription(
