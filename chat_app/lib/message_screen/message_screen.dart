@@ -111,7 +111,7 @@ class _MessageBodyState extends State<MessageBody> {
                               color:
                                   data[index]['senderName'] == widget.senderName
                                       ? Colors.teal[900]
-                                      : Colors.blueGrey[900],
+                                      : Colors.blueGrey,
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(
