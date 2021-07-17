@@ -21,6 +21,12 @@ class _UserScreenState extends State<UserScreen>
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    tabController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;

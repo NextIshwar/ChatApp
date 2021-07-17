@@ -139,7 +139,19 @@ class WriteMessage extends StatefulWidget {
 }
 
 class _WriteMessageState extends State<WriteMessage> {
-  TextEditingController msgController = TextEditingController();
+  late TextEditingController msgController;
+  @override
+  void initState() {
+    super.initState();
+    msgController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    msgController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GraphQLProvider(
