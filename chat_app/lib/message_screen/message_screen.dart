@@ -79,6 +79,7 @@ class MessageBody extends StatefulWidget {
 class _MessageBodyState extends State<MessageBody> {
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return GraphQLProvider(
       client: Config.initailizeClient(),
       child: Subscription(
@@ -107,6 +108,7 @@ class _MessageBodyState extends State<MessageBody> {
                       children: [
                         Container(
                             padding: EdgeInsets.all(10),
+                            constraints: BoxConstraints(maxWidth: width * 0.5),
                             decoration: BoxDecoration(
                               color:
                                   data[index]['senderName'] == widget.senderName
