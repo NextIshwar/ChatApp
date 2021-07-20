@@ -12,6 +12,9 @@ class MessageScreen extends StatelessWidget {
       this.senderName = ""});
   @override
   Widget build(BuildContext context) {
+    final modedValue = (senderName + receiverName).length % 10;
+    final String getMsgQuery = Queries.findGetMsgQuery(modedValue);
+
     return Scaffold(
       extendBody: true,
       appBar: AppBar(
@@ -54,6 +57,8 @@ class MessageScreen extends StatelessWidget {
           MessageBody(
             chatId: chatId,
             senderName: senderName,
+            receiverName: receiverName,
+            queryString: getMsgQuery,
           ),
           Positioned(
             bottom: 0,
@@ -70,8 +75,12 @@ class MessageScreen extends StatelessWidget {
 }
 
 class MessageBody extends StatefulWidget {
-  final String chatId, senderName;
-  MessageBody({this.chatId = "", this.senderName = ""});
+  final String chatId, senderName, receiverName, queryString;
+  MessageBody(
+      {this.chatId = "",
+      this.senderName = "",
+      this.receiverName = "",
+      this.queryString = ""});
   @override
   _MessageBodyState createState() => _MessageBodyState();
 }
@@ -85,7 +94,7 @@ class _MessageBodyState extends State<MessageBody> {
       child: Subscription(
         options: SubscriptionOptions(
           variables: {"id": "${widget.chatId}"},
-          document: gql(Queries.getMsgs),
+          document: gql(widget.queryString),
         ),
         builder: (result) {
           if (result.isLoading) {
@@ -156,10 +165,13 @@ class _WriteMessageState extends State<WriteMessage> {
 
   @override
   Widget build(BuildContext context) {
+    final modValue =
+        (widget.receiverName.length + widget.senderName.length) % 10;
+    final String createMsgQuery = Queries.findCreateMsgQuery(modValue);
     return GraphQLProvider(
       client: Config.initailizeClient(),
       child: Mutation(
-        options: MutationOptions(document: gql(Queries.sendMsg)),
+        options: MutationOptions(document: gql(createMsgQuery)),
         builder: (runMutation, result) => Container(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
