@@ -19,23 +19,28 @@ class MessageScreen extends StatelessWidget {
       extendBody: true,
       appBar: AppBar(
         backgroundColor: Colors.teal[900],
-        title: Row(
-          children: [
-            Icon(
-              Icons.account_circle,
-              size: 30.0,
-            ),
-            SizedBox(
-              width: 5,
-            ),
-            Text(
-              "$receiverName",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18),
-            ),
-          ],
+        title: InkWell(
+          onTap: () {
+            print("hello world");
+          },
+          child: Row(
+            children: [
+              Icon(
+                Icons.account_circle,
+                size: 30.0,
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              Text(
+                "$receiverName",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18),
+              ),
+            ],
+          ),
         ),
         actions: <Widget>[
           Padding(
@@ -61,7 +66,7 @@ class MessageScreen extends StatelessWidget {
             queryString: getMsgQuery,
           ),
           Positioned(
-            bottom: 0,
+            bottom: 20,
             child: WriteMessage(
               chatId: chatId,
               senderName: senderName,
@@ -102,7 +107,13 @@ class _MessageBodyState extends State<MessageBody> {
               child: CircularProgressIndicator(),
             );
           }
-          var data = result.data?['channel_chat_aggregate']['nodes'];
+
+          var data = result.data?['channel_table1'];
+          if (data.length <= 0) {
+            return Center(
+              child: Text("Please enter your first message"),
+            );
+          }
           var noOfData = data.length;
           return (noOfData > 0)
               ? ListView.builder(

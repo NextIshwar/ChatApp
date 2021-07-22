@@ -15,7 +15,7 @@ class _LoginPageState extends State<LoginPage> {
     return Container(
       alignment: Alignment.center,
       child: SizedBox(
-        height: 50,
+        height: 200,
         child: Mutation(
           options: MutationOptions(
             document: gql(Queries.insertUser),

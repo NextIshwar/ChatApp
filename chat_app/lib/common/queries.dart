@@ -176,121 +176,101 @@ class Queries {
 }''';
 
   static String getMsgsFromTable1 = r'''subscription MyQuery($id: String!) {
-  channel_chat_aggregate(where: {channelId: {_eq: $id}}) {
-    nodes {
-      msg
-      receiverName
-      senderName
-      timeStamp
-    }
+  channel_table1(where: {channelId: {_eq: $id}}) {
+    msg
+    receiverName
+    senderName
+    timeStamp
   }
 }
 ''';
 
   static String getMsgsFromTable2 = r'''subscription MyQuery($id: String!) {
-  channel_chat_aggregate(where: {channelId: {_eq: $id}}) {
-    nodes {
-      msg
-      receiverName
-      senderName
-      timeStamp
-    }
+  channel_table2(where: {channelId: {_eq: $id}}) {
+    msg
+    receiverName
+    senderName
+    timeStamp
   }
 }
 ''';
 
   static String getMsgsFromTable3 = r'''subscription MyQuery($id: String!) {
-  channel_chat_aggregate(where: {channelId: {_eq: $id}}) {
-    nodes {
-      msg
-      receiverName
-      senderName
-      timeStamp
-    }
+  channel_table3(where: {channelId: {_eq: $id}}) {
+    msg
+    receiverName
+    senderName
+    timeStamp
   }
 }
 ''';
 
   static String getMsgsFromTable4 = r'''subscription MyQuery($id: String!) {
-  channel_chat_aggregate(where: {channelId: {_eq: $id}}) {
-    nodes {
-      msg
-      receiverName
-      senderName
-      timeStamp
-    }
+  channel_table4(where: {channelId: {_eq: $id}}) {
+    msg
+    receiverName
+    senderName
+    timeStamp
   }
 }
 ''';
 
   static String getMsgsFromTable5 = r'''subscription MyQuery($id: String!) {
-  channel_chat_aggregate(where: {channelId: {_eq: $id}}) {
-    nodes {
-      msg
-      receiverName
-      senderName
-      timeStamp
-    }
+  channel_table5(where: {channelId: {_eq: $id}}) {
+    msg
+    receiverName
+    senderName
+    timeStamp
   }
 }
 ''';
 
   static String getMsgsFromTable6 = r'''subscription MyQuery($id: String!) {
-  channel_chat_aggregate(where: {channelId: {_eq: $id}}) {
-    nodes {
-      msg
-      receiverName
-      senderName
-      timeStamp
-    }
+  channel_table6(where: {channelId: {_eq: $id}}) {
+    msg
+    receiverName
+    senderName
+    timeStamp
   }
 }
 ''';
 
   static String getMsgsFromTable7 = r'''subscription MyQuery($id: String!) {
-  channel_chat_aggregate(where: {channelId: {_eq: $id}}) {
-    nodes {
-      msg
-      receiverName
-      senderName
-      timeStamp
-    }
+  channel_table7(where: {channelId: {_eq: $id}}) {
+    msg
+    receiverName
+    senderName
+    timeStamp
   }
 }
 ''';
 
   static String getMsgsFromTable8 = r'''subscription MyQuery($id: String!) {
-  channel_chat_aggregate(where: {channelId: {_eq: $id}}) {
-    nodes {
-      msg
-      receiverName
-      senderName
-      timeStamp
-    }
+  channel_table8(where: {channelId: {_eq: $id}}) {
+    msg
+    receiverName
+    senderName
+    timeStamp
   }
 }
 ''';
 
   static String getMsgsFromTable9 = r'''subscription MyQuery($id: String!) {
-  channel_chat_aggregate(where: {channelId: {_eq: $id}}) {
-    nodes {
-      msg
-      receiverName
-      senderName
-      timeStamp
-    }
+  channel_table9(where: {channelId: {_eq: $id}}) {
+    msg
+    receiverName
+    senderName
+    timeStamp
   }
 }
 ''';
 
   static String getMsgsFromTable10 = r'''subscription MyQuery($id: String!) {
-  channel_chat_aggregate(where: {channelId: {_eq: $id}}) {
-    nodes {
-      msg
-      receiverName
-      senderName
-      timeStamp
-    }
+  channel_table10(where: {channelId: {_eq: $id}}) {
+    msg
+    receiverName
+    senderName
+    timeStamp
   }
 }
 ''';
