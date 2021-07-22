@@ -1,3 +1,4 @@
+import 'package:chat_app/common/chat_imports.dart';
 import 'package:chat_app/common/graphql_config.dart';
 import 'package:chat_app/common/queries.dart';
 import 'package:flutter/material.dart';
@@ -21,13 +22,19 @@ class MessageScreen extends StatelessWidget {
         backgroundColor: Colors.teal[900],
         title: InkWell(
           onTap: () {
-            print("hello world");
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => UserProfile(tag: receiverId,)),
+            );
           },
           child: Row(
             children: [
-              Icon(
-                Icons.account_circle,
-                size: 30.0,
+              Hero(
+                tag: receiverId,
+                child: Icon(
+                  Icons.account_circle,
+                  size: 30.0,
+                ),
               ),
               SizedBox(
                 width: 5,
