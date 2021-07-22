@@ -24,7 +24,10 @@ class MessageScreen extends StatelessWidget {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => UserProfile(tag: receiverId,)),
+              MaterialPageRoute(
+                  builder: (context) => UserProfile(
+                        tag: receiverId,
+                      )),
             );
           },
           child: Row(

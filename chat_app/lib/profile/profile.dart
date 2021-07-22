@@ -69,6 +69,7 @@ class ProfilePicture extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (context) => ViewProfileImage(
                       tag: tag.toString(),
+                      userNameTag: "User Name",
                     ),
                   ),
                 );
@@ -82,12 +83,15 @@ class ProfilePicture extends StatelessWidget {
           Positioned(
             left: width * 0.01,
             bottom: height * 0.15,
-            child: Text(
-              "User Name",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
+            child: Hero(
+              tag: "User Name",
+              child: Text(
+                "User Name",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
+              ),
             ),
           )
         ],
@@ -198,14 +202,29 @@ class MediaFilesWidget extends StatelessWidget {
 
 class ViewProfileImage extends StatelessWidget {
   final String tag;
-  const ViewProfileImage({Key? key, required this.tag}) : super(key: key);
+  final String userNameTag;
+  const ViewProfileImage(
+      {Key? key, required this.tag, required this.userNameTag})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: Text("User Name"),
+        title: Hero(
+          tag: userNameTag,
+          child: Material(
+            color: Colors.transparent,
+            child: Text(
+              "User Name",
+              style: TextStyle(
+                  color: ColorPalette.secondaryColor,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500),
+            ),
+          ),
+        ),
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
