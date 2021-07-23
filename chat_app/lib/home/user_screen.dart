@@ -70,7 +70,10 @@ class _UserScreenState extends State<UserScreen>
             ),
             Padding(
               padding: const EdgeInsets.only(right: 16.0),
-              child: Icon(Icons.more_vert),
+              child: IconButton(
+                icon: Icon(Icons.more_vert),
+                onPressed: () {},
+              ),
             ),
           ],
           backgroundColor: Colors.teal[900],

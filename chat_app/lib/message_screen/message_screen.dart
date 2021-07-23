@@ -27,6 +27,7 @@ class MessageScreen extends StatelessWidget {
               MaterialPageRoute(
                   builder: (context) => UserProfile(
                         tag: receiverId,
+                        receiverName: receiverName,
                       )),
             );
           },
@@ -137,19 +138,20 @@ class _MessageBodyState extends State<MessageBody> {
                               : CrossAxisAlignment.start,
                       children: [
                         Container(
-                            padding: EdgeInsets.all(10),
-                            constraints: BoxConstraints(maxWidth: width * 0.5),
-                            decoration: BoxDecoration(
-                              color:
-                                  data[index]['senderName'] == widget.senderName
-                                      ? Colors.teal[900]
-                                      : Colors.blueGrey,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Text(
-                              data[index]['msg'],
-                              style: TextStyle(color: Colors.white),
-                            ))
+                          padding: EdgeInsets.all(10),
+                          constraints: BoxConstraints(maxWidth: width * 0.5),
+                          decoration: BoxDecoration(
+                            color:
+                                data[index]['senderName'] == widget.senderName
+                                    ? Colors.teal[900]
+                                    : Colors.blueGrey,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            data[index]['msg'],
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -192,7 +194,9 @@ class _WriteMessageState extends State<WriteMessage> {
     return GraphQLProvider(
       client: Config.initailizeClient(),
       child: Mutation(
-        options: MutationOptions(document: gql(createMsgQuery)),
+        options: MutationOptions(
+          document: gql(createMsgQuery),
+        ),
         builder: (runMutation, result) => Container(
           child: Padding(
             padding: const EdgeInsets.all(8.0),

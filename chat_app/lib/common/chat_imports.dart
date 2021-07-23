@@ -7,3 +7,7 @@ export 'package:chat_app/home/user_screen.dart';
 export 'package:chat_app/common/image_url.dart';
 export 'package:chat_app/profile/profile.dart';
 export 'package:chat_app/common/colors.dart';
+export 'package:chat_app/profile/custom_text_widget.dart';
+export 'package:chat_app/profile/view_profile_image.dart';
+export 'package:chat_app/profile/other_user_details.dart';
+export 'package:chat_app/profile/media_file_widget.dart';
