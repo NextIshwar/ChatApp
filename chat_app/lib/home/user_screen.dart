@@ -72,7 +72,9 @@ class _UserScreenState extends State<UserScreen>
               padding: const EdgeInsets.only(right: 16.0),
               child: IconButton(
                 icon: Icon(Icons.more_vert),
-                onPressed: () {},
+                onPressed: () {
+                  _showPopupMenu(context);
+                },
               ),
             ),
           ],
@@ -200,4 +202,27 @@ String getChannelId(String sender, receiver) {
   var valList = concat.split("");
   valList.sort();
   return valList.toString();
+}
+
+void _showPopupMenu(BuildContext context, {Offset? offset}) async {
+  await showMenu(
+    context: context,
+    position: RelativeRect.fromLTRB(1000, 90, 40, 10),
+    items: [
+      PopupMenuItem<String>(
+          child: InkWell(
+            child: const Text('My Profile'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MyProfile(),
+                ),
+              );
+            },
+          ),
+          value: 'Doge'),
+    ],
+    elevation: 8.0,
+  );
 }
