@@ -1,8 +1,10 @@
 import 'package:chat_app/common/chat_imports.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class MyProfile extends StatelessWidget {
-  const MyProfile({Key? key}) : super(key: key);
+  final String? userName, email;
+  const MyProfile({Key? key, this.userName, this.email}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,12 +29,12 @@ class MyProfile extends StatelessWidget {
           AboutSection(
             icon: Icons.person,
             title: "Name",
-            value: "User name",
+            value: userName,
           ),
           AboutSection(
-            icon: Icons.person,
+            icon: Icons.mail,
             title: "Email",
-            value: "email@gmail.com",
+            value: email,
           ),
         ],
       ),
@@ -75,7 +77,9 @@ class _ProfileImageState extends State<ProfileImage> {
                 size: 40,
                 color: ColorPalette.secondaryColor,
               ),
-              onPressed: () {},
+              onPressed: () async{
+                var data=await upoadImage();
+              },
             ),
           )
         ],
@@ -132,4 +136,11 @@ class AboutSection extends StatelessWidget {
       ),
     );
   }
+}
+
+upoadImage() async {
+  final ImagePicker _picker = ImagePicker();
+  final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+  final imageBytes = await image?.readAsBytes();
+  return imageBytes;
 }

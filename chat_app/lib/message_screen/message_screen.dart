@@ -15,6 +15,7 @@ class MessageScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final modedValue = (senderName + receiverName).length % 10;
     final String getMsgQuery = Queries.findGetMsgQuery(modedValue);
+    final String tableName = Queries.getTableName(modedValue);
 
     return Scaffold(
       extendBody: true,
@@ -75,6 +76,7 @@ class MessageScreen extends StatelessWidget {
             senderName: senderName,
             receiverName: receiverName,
             queryString: getMsgQuery,
+            tableName: tableName,
           ),
           Positioned(
             bottom: 20,
@@ -91,12 +93,14 @@ class MessageScreen extends StatelessWidget {
 }
 
 class MessageBody extends StatefulWidget {
-  final String chatId, senderName, receiverName, queryString;
-  MessageBody(
-      {this.chatId = "",
-      this.senderName = "",
-      this.receiverName = "",
-      this.queryString = ""});
+  final String chatId, senderName, receiverName, queryString, tableName;
+  MessageBody({
+    this.chatId = "",
+    this.senderName = "",
+    this.receiverName = "",
+    this.queryString = "",
+    this.tableName = "",
+  });
   @override
   _MessageBodyState createState() => _MessageBodyState();
 }
@@ -119,13 +123,13 @@ class _MessageBodyState extends State<MessageBody> {
             );
           }
 
-          var data = result.data?['channel_table1'];
-          if (data.length <= 0) {
+          var data = result.data?[widget.tableName];
+          if (data?.length <= 0) {
             return Center(
               child: Text("Please enter your first message"),
             );
           }
-          var noOfData = data.length;
+          var noOfData = data?.length;
           return (noOfData > 0)
               ? ListView.builder(
                   itemBuilder: (context, index) => Padding(

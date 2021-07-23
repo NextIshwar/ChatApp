@@ -73,7 +73,7 @@ class _UserScreenState extends State<UserScreen>
               child: IconButton(
                 icon: Icon(Icons.more_vert),
                 onPressed: () {
-                  _showPopupMenu(context);
+                  _showPopupMenu(context, widget.token?[userInfo.userName.index]??"", widget.token?[userInfo.email.index]);
                 },
               ),
             ),
@@ -204,7 +204,7 @@ String getChannelId(String sender, receiver) {
   return valList.toString();
 }
 
-void _showPopupMenu(BuildContext context, {Offset? offset}) async {
+void _showPopupMenu(BuildContext context, String userName, email) async {
   await showMenu(
     context: context,
     position: RelativeRect.fromLTRB(1000, 90, 40, 10),
@@ -216,7 +216,7 @@ void _showPopupMenu(BuildContext context, {Offset? offset}) async {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => MyProfile(),
+                  builder: (context) => MyProfile(userName:userName,email:email),
                 ),
               );
             },

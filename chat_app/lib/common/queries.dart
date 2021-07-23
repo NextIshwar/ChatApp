@@ -337,4 +337,32 @@ class Queries {
         return Queries.sendMsgOnTable1;
     }
   }
+
+  static String getTableName(int mod) {
+    switch (mod) {
+      case 1:
+        return "channel_table1";
+      case 2:
+        return "channel_table2";
+      case 3:
+        return "channel_table3";
+      case 4:
+        return "channel_table4";
+      case 5:
+        return "channel_table5";
+      case 6:
+        return "channel_table6";
+      case 7:
+        return "channel_table7";
+      case 8:
+        return "channel_table8";
+      case 9:
+        return "channel_table9";
+      case 10:
+        return "channel_table10";
+      
+      default:
+        return "channel_table1";
+    }
+  }
 }
