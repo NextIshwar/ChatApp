@@ -1,10 +1,15 @@
+import 'dart:io';
+
 import 'package:chat_app/common/chat_imports.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
 class MyProfile extends StatelessWidget {
-  final String? userName, email;
-  const MyProfile({Key? key, this.userName, this.email}) : super(key: key);
+  final String? userName, email, imageUrl;
+  const MyProfile({Key? key, this.userName, this.email, this.imageUrl})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +30,10 @@ class MyProfile extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          ProfileImage(),
+          ProfileImage(
+            email: email,
+            imageUrl: imageUrl,
+          ),
           AboutSection(
             icon: Icons.person,
             title: "Name",
@@ -43,46 +51,87 @@ class MyProfile extends StatelessWidget {
 }
 
 class ProfileImage extends StatefulWidget {
-  const ProfileImage({Key? key}) : super(key: key);
+  final String? email, imageUrl;
+  const ProfileImage({Key? key, this.email, this.imageUrl}) : super(key: key);
 
   @override
   _ProfileImageState createState() => _ProfileImageState();
 }
 
 class _ProfileImageState extends State<ProfileImage> {
+  String imageUrl = '';
+  @override
+  void initState() {
+    super.initState();
+    imageUrl = widget.imageUrl ?? "";
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(100.0),
-      child: Stack(
-        children: [
-          Align(
-            alignment: Alignment.center,
-            child: CircleAvatar(
-              backgroundColor: Colors.black,
-              child: Image.asset(
-                AllImages.defaultProfileImage,
-                height: 150,
-                fit: BoxFit.fill,
+    return GraphQLProvider(
+      client: Config.initailizeClient(),
+      child: Query(
+        options: QueryOptions(
+          document: gql(Queries.getProfileImage),
+          variables: {"id": widget.email},
+        ),
+        builder: (result, {fetchMore, refetch}) {
+          if (result.isLoading) {
+            return Center(
+              child: Padding(
+                padding: EdgeInsets.all(100.0),
+                child: CircleAvatar(
+                    backgroundColor: ColorPalette.secondaryColor,
+                    radius: 100,
+                    child: CircularProgressIndicator()),
               ),
-              radius: 100,
+            );
+          }
+          imageUrl = result
+              .data?['User_users_aggregate']['nodes'].first['profileImage'];
+          return Mutation(
+            options: MutationOptions(
+              document: gql(Queries.insertImage),
             ),
-          ),
-          Positioned(
-            bottom: 10,
-            right: 40,
-            child: IconButton(
-              icon: Icon(
-                Icons.camera_enhance,
-                size: 40,
-                color: ColorPalette.secondaryColor,
+            builder: (insert, result) => Padding(
+              padding: EdgeInsets.all(100.0),
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: CircleAvatar(
+                      backgroundImage: (imageUrl != '')
+                          ? NetworkImage(
+                              imageUrl,
+                            )
+                          : NetworkImage(Constants.defaultImageUrl),
+                      backgroundColor: Colors.black,
+                      radius: 100,
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 10,
+                    right: 40,
+                    child: IconButton(
+                      icon: Icon(Icons.camera_enhance,
+                          size: 40, color: ColorPalette.secondaryColor),
+                      onPressed: () async {
+                        Loader.of(context).show();
+                        var data = await uploadImage(widget.email ?? "");
+
+                        setState(() {
+                          imageUrl = data;
+                        });
+                        Loader.of(context).hide();
+                        insert({"id": widget.email, "url": imageUrl});
+                      },
+                    ),
+                  )
+                ],
               ),
-              onPressed: () async{
-                var data=await upoadImage();
-              },
             ),
-          )
-        ],
+          );
+        },
       ),
     );
   }
@@ -138,9 +187,21 @@ class AboutSection extends StatelessWidget {
   }
 }
 
-upoadImage() async {
+Future<String> uploadImage(String imageName) async {
+  final _firebaseStorage = FirebaseStorage.instance;
+
+  //Select Image
   final ImagePicker _picker = ImagePicker();
   final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-  final imageBytes = await image?.readAsBytes();
-  return imageBytes;
+  var file = File(image?.path ?? "");
+
+  if (image != null) {
+    //Upload to Firebase
+    var snapshot =
+        await _firebaseStorage.ref().child('images/$imageName').putFile(file);
+    String downloadUrl = await snapshot.ref.getDownloadURL();
+    return downloadUrl;
+  } else {
+    return '';
+  }
 }

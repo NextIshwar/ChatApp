@@ -13,6 +13,7 @@ class Queries {
       name
       id
       email
+      profileImage
     }
   }
 }''';
@@ -27,6 +28,24 @@ class Queries {
     }
   }
 }''';
+
+  static String insertImage =
+      r'''mutation insertUser($id: String!, $url: String!) {
+  update_User_users(where: {id: {_eq: $id}}, _set: {profileImage: $url}) {
+    returning {
+      profileImage
+    }
+  }
+}''';
+
+  static String getProfileImage = r'''query MyQuery($id:String!) {
+  User_users_aggregate(where: {id: {_eq: $id}}) {
+    nodes {
+      profileImage
+    }
+  }
+}
+''';
 
   static String sendMsg =
       r'''mutation sendmsg($channelId:String!,$senderName:String!,$receiverName:String!, $msg:String!){
@@ -360,7 +379,7 @@ class Queries {
         return "channel_table9";
       case 10:
         return "channel_table10";
-      
+
       default:
         return "channel_table1";
     }

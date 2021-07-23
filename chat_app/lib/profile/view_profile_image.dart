@@ -18,7 +18,7 @@ class ViewProfileImage extends StatelessWidget {
           child: Material(
             color: Colors.transparent,
             child: Text(
-              "User Name",
+              "$userNameTag",
               style: TextStyle(
                   color: ColorPalette.secondaryColor,
                   fontSize: 20,

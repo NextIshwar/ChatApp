@@ -5,7 +5,9 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 
 class UserScreen extends StatefulWidget {
   final List<String>? token;
-  UserScreen({this.token});
+  UserScreen({
+    this.token,
+  });
 
   @override
   _UserScreenState createState() => _UserScreenState();
@@ -73,7 +75,11 @@ class _UserScreenState extends State<UserScreen>
               child: IconButton(
                 icon: Icon(Icons.more_vert),
                 onPressed: () {
-                  _showPopupMenu(context, widget.token?[userInfo.userName.index]??"", widget.token?[userInfo.email.index]);
+                  _showPopupMenu(
+                    context,
+                    widget.token?[userInfo.userName.index] ?? "",
+                    widget.token?[userInfo.email.index],
+                  );
                 },
               ),
             ),
@@ -211,17 +217,23 @@ void _showPopupMenu(BuildContext context, String userName, email) async {
     items: [
       PopupMenuItem<String>(
           child: InkWell(
-            child: const Text('My Profile'),
+            child: const Text(
+              'My Profile',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => MyProfile(userName:userName,email:email),
+                  builder: (context) => MyProfile(
+                    userName: userName,
+                    email: email,
+                  ),
                 ),
               );
             },
           ),
-          value: 'Doge'),
+          value: 'profile'),
     ],
     elevation: 8.0,
   );
