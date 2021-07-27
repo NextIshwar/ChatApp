@@ -14,6 +14,7 @@ class StatusViewPage extends StatefulWidget {
 class _StatusViewPageState extends State<StatusViewPage> {
   List<UserStatus> status = [];
   List<UserStatus> myStatus = [];
+  Map<String, OtherStatus> statuses = {};
   @override
   Widget build(BuildContext context) {
     return GraphQLProvider(
@@ -35,6 +36,16 @@ class _StatusViewPageState extends State<StatusViewPage> {
                     textMsg: result.data?['User_status'][i]['textStatus']),
               );
             } else {
+              if (!statuses
+                  .containsKey(result.data?['User_status'][i]['userId'])) {
+                statuses[result.data?['User_status'][i]['userId']] =
+                    OtherStatus(result.data?['User_status'][i]['userName'],
+                        [result.data?['User_status'][i]['textStatus']]);
+              } else {
+                statuses[result.data?['User_status'][i]['userId']]
+                    ?.statuses!
+                    .add(result.data?['User_status'][i]['textStatus']);
+              }
               status.add(
                 UserStatus(
                     userName: result.data?['User_status'][i]['userName'],
@@ -138,90 +149,76 @@ class _StatusViewPageState extends State<StatusViewPage> {
                         BoxDecoration(color: ColorPalette.secondaryColor),
                     padding: EdgeInsets.all(8.0),
                     child: ListView(
-                      children: List.generate(
-                        status.length,
-                        (index) => ListTile(
-                          leading: CircleAvatar(
-                            radius: 30,
-                            backgroundImage:
-                                NetworkImage(AllImages.defaultProfileImage),
-                          ),
-                          title: Text(
-                            status[index].userName ?? "Default",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          subtitle: Text(
-                            status[index].textMsg ?? "",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => StoryViewPage(
-                                  userId: widget.userId,
-                                ),
+                      children: statuses.entries
+                          .map(
+                            (e) => ListTile(
+                              leading: CircleAvatar(
+                                radius: 30,
+                                backgroundImage:
+                                    NetworkImage(AllImages.defaultProfileImage),
                               ),
-                            );
-                          },
-                        ),
-                      ),
+                              title: Text(
+                                e.value.toString(),
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Text(
+                                "18/06/2021",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MyStatus(
+                                      userId: e.value.userName,
+                                      textMessage: e.value.statuses!
+                                          .map(
+                                            (n) => UserStatus(
+                                              userName: e.value.userName,
+                                              textMsg: n.toString(),
+                                            ),
+                                          )
+                                          .toList(),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          )
+                          .toList(),
                     ),
+                    // child: ListView(
+                    //   children: List.generate(
+                    //     statuses.length,
+                    //     (index) => ListTile(
+                    // leading: CircleAvatar(
+                    //   radius: 30,
+                    //   backgroundImage:
+                    //       NetworkImage(AllImages.defaultProfileImage),
+                    // ),
+                    // title: Text(
+                    //   status[index].userName ?? "Default",
+                    //   style: TextStyle(fontWeight: FontWeight.bold),
+                    // ),
+                    // subtitle: Text(
+                    //   status[index].textMsg ?? "",
+                    //   style: TextStyle(fontWeight: FontWeight.bold),
+                    // ),
+                    //       onTap: () {
+                    //         Navigator.push(
+                    //           context,
+                    //           MaterialPageRoute(
+                    //             builder: (context) => StoryViewPage(
+                    //               userId: widget.userId,
+                    //             ),
+                    //           ),
+                    //         );
+                    //       },
+                    //     ),
+                    //   ),
+                    // ),
                   ),
                 ),
-                // Subscription(
-                //   options: SubscriptionOptions(
-                //       document: gql(Queries.getTextStatus),
-                //       variables: {"id": widget.userId}),
-                //   builder: (result, {fetchMore, refetch}) {
-                //     if (result.isLoading) {
-                //       return Expanded(
-                //         child: Container(
-                //           decoration:
-                //               BoxDecoration(color: ColorPalette.secondaryColor),
-                //         ),
-                //       );
-                //     }
-                //     return Expanded(
-                //         child: Container(
-                //       decoration:
-                //           BoxDecoration(color: ColorPalette.secondaryColor),
-                //       padding: EdgeInsets.all(8.0),
-                //       child: ListView(
-                //         children: List.generate(
-                //           result.data?['User_status_aggregate']['nodes'].length,
-                //           (index) => ListTile(
-                //             leading: CircleAvatar(
-                //               radius: 30,
-                //               backgroundImage:
-                //                   NetworkImage(AllImages.defaultProfileImage),
-                //             ),
-                //             title: Text(
-                //               result.data?['User_status_aggregate']['nodes']
-                //                   [index]['userName'],
-                //               style: TextStyle(fontWeight: FontWeight.bold),
-                //             ),
-                //             subtitle: Text(
-                //               result.data?['User_status_aggregate']['nodes']
-                //                   [index]['timeStamp'],
-                //               style: TextStyle(fontWeight: FontWeight.bold),
-                //             ),
-                //             onTap: () {
-                //               Navigator.push(
-                //                 context,
-                //                 MaterialPageRoute(
-                //                   builder: (context) => StoryViewPage(
-                //                     userId: widget.userId,
-                //                   ),
-                //                 ),
-                //               );
-                //             },
-                //           ),
-                //         ),
-                //       ),
-                //     ));
-                //   },
-                // )
               ],
             ),
           );
@@ -236,4 +233,11 @@ class UserStatus {
   final String? textMsg;
 
   UserStatus({this.userName, this.textMsg});
+}
+
+class OtherStatus {
+  final String? userName;
+  final List<String>? statuses;
+
+  OtherStatus(this.userName, this.statuses);
 }

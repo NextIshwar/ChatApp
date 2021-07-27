@@ -35,63 +35,69 @@ class _AddStatusState extends State<AddStatus> {
         options: MutationOptions(
           document: gql(Queries.setStatus),
         ),
-        builder: (runMutation, result) => Scaffold(
-          floatingActionButton: showUpdateButton
-              ? FloatingActionButton(
-                  backgroundColor: ColorPalette.primaryColor,
-                  onPressed: () {
-                    runMutation(<String, dynamic>{
-                      "id": widget.id,
-                      "textStatus": controller.text,
-                      "isUrl": false
-                    });
-                    // Navigator.pop(context);
-                  },
-                  child: Icon(
-                    Icons.send,
-                    color: ColorPalette.secondaryColor,
-                  ),
-                )
-              : null,
-          backgroundColor: Colors.yellow,
-          body: Center(
-            child: SizedBox(
-              width: width * 0.3,
-              child: TextFormField(
-                keyboardType: TextInputType.multiline,
-                minLines: 1,
-                maxLines: 100,
-                controller: controller,
-                cursorColor: Colors.white,
-                cursorWidth: 4,
-                autofocus: true,
-                onChanged: (val) {
-                  if (!val.trim().isEmpty) {
-                    setState(() {
-                      showUpdateButton = true;
-                    });
-                  } else {
-                    setState(() {
-                      showUpdateButton = false;
-                    });
-                  }
-                },
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 40),
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: "Type a status",
-                  hintStyle: TextStyle(
-                      fontSize: 40,
+        builder: (runMutation, result) {
+          if (result?.data?.isNotEmpty ?? false) {
+            Navigator.pop(context);
+          }
+          return Scaffold(
+            floatingActionButton: showUpdateButton
+                ? FloatingActionButton(
+                    backgroundColor: ColorPalette.primaryColor,
+                    onPressed: () {
+                      runMutation(<String, dynamic>{
+                        "id": widget.id,
+                        "textStatus": controller.text,
+                        "isUrl": false,
+                        "userName": widget.userName
+                      });
+                      // Navigator.pop(context);
+                    },
+                    child: Icon(
+                      Icons.send,
                       color: ColorPalette.secondaryColor,
-                      fontWeight: FontWeight.bold),
+                    ),
+                  )
+                : null,
+            backgroundColor: Colors.yellow,
+            body: Center(
+              child: SizedBox(
+                width: width * 0.3,
+                child: TextFormField(
+                  keyboardType: TextInputType.multiline,
+                  minLines: 1,
+                  maxLines: 100,
+                  controller: controller,
+                  cursorColor: Colors.white,
+                  cursorWidth: 4,
+                  autofocus: true,
+                  onChanged: (val) {
+                    if (!val.trim().isEmpty) {
+                      setState(() {
+                        showUpdateButton = true;
+                      });
+                    } else {
+                      setState(() {
+                        showUpdateButton = false;
+                      });
+                    }
+                  },
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 40),
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: "Type a status",
+                    hintStyle: TextStyle(
+                        fontSize: 40,
+                        color: ColorPalette.secondaryColor,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }

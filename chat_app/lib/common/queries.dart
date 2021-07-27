@@ -113,8 +113,8 @@ class Queries {
 }''';
 
   static String setStatus =
-      r'''mutation addStatus($id:String!,$textStatus:String!,$isUrl:Boolean!) {
-  insert_User_status(objects: [{userId:$id,textStatus:$textStatus, isUrl:$isUrl}]) {
+      r'''mutation addStatus($id:String!,$textStatus:String!,$isUrl:Boolean!, $userName:String!) {
+  insert_User_status(objects: [{userId:$id,textStatus:$textStatus, isUrl:$isUrl, userName:$userName}]) {
     returning {
       userId
     }

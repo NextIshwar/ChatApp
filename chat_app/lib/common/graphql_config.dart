@@ -5,6 +5,7 @@ class Config {
   static final WebSocketLink socketLink = WebSocketLink(
     'wss://pet-drake-49.hasura.app/v1/graphql',
     config: SocketClientConfig(
+      queryAndMutationTimeout: Duration(minutes: 1),
       initialPayload: () {
         return {
           'headers': {
@@ -25,3 +26,18 @@ class Config {
     return client;
   }
 }
+
+// class Config2 {
+//   static final HttpLink socketLink = HttpLink(
+//     'https://pet-drake-49.hasura.app/v1/graphql',
+//   );
+//   static ValueNotifier<GraphQLClient> initailizeClient() {
+//     ValueNotifier<GraphQLClient> client = ValueNotifier(
+//       GraphQLClient(
+//         cache: GraphQLCache(),
+//         link: socketLink,
+//       ),
+//     );
+//     return client;
+//   }
+// }
