@@ -15,3 +15,8 @@ export 'package:chat_app/profile/my_profile.dart';
 export 'package:chat_app/common/constants.dart';
 export 'package:chat_app/common/loader.dart';
 export 'package:chat_app/common/queries.dart';
+export 'package:chat_app/status/status_page.dart';
+
+export 'package:chat_app/status/add_status_page.dart';
+export 'package:chat_app/status/my_status_page.dart';
+export 'package:chat_app/status/story_view_page.dart';

@@ -48,13 +48,15 @@ class _UserScreenState extends State<UserScreen>
                 child: Text("CHATS"),
               ),
               Tab(
-                  child: Text(
-                "STATUS",
-              )),
+                child: Text(
+                  "STATUS",
+                ),
+              ),
               Tab(
-                  child: Text(
-                "CALLS",
-              )),
+                child: Text(
+                  "CALLS",
+                ),
+              ),
             ],
             indicatorColor: Colors.white,
           ),
@@ -194,7 +196,10 @@ class _UserScreenState extends State<UserScreen>
                 );
               },
             ),
-            Text("Status Screen"),
+            StatusViewPage(
+              userId: widget.token?[userInfo.email.index],
+              userName: widget.token?[userInfo.userName.index],
+            ),
             Text("Call Screen"),
           ],
         ),

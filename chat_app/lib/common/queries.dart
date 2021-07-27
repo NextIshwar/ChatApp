@@ -72,6 +72,33 @@ class Queries {
 }
 ''';
 
+  static String dummyTable = r'''mutation addUserData{
+  insert_User_rough(objects:[{name:"prem",city:"Kolkata"}]){
+    returning{
+      name
+      city
+    }
+  }
+}''';
+
+  static String getTextStatus = r'''query MyQuery{
+  User_status{
+    id
+    userName
+    textStatus
+    userId
+  }
+}
+''';
+
+  static String myStatus = r'''subscription MyQuery($id: String!) {
+  User_users_aggregate(where: {id: {_eq: $id}}) {
+    nodes {
+      textStatus
+    }
+  }
+}
+''';
   static String sendMsgOnTable1 =
       r'''mutation sendmsg($channelId:String!,$senderName:String!,$receiverName:String!, $msg:String!){
   insert_channel_table1(objects:[{channelId:$channelId,senderName:$senderName,receiverName:$receiverName,msg:$msg}]){
@@ -84,6 +111,16 @@ class Queries {
     }
   }
 }''';
+
+  static String setStatus =
+      r'''mutation addStatus($id:String!,$textStatus:String!,$isUrl:Boolean!) {
+  insert_User_status(objects: [{userId:$id,textStatus:$textStatus, isUrl:$isUrl}]) {
+    returning {
+      userId
+    }
+  }
+}
+''';
 
   static String sendMsgOnTable2 =
       r'''mutation sendmsg($channelId:String!,$senderName:String!,$receiverName:String!, $msg:String!){
