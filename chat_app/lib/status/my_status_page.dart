@@ -29,6 +29,9 @@ class _MyStatusState extends State<MyStatus> {
   Widget build(BuildContext context) {
     return Material(
         child: StoryView(
+      onComplete: () {
+        Navigator.pop(context);
+      },
       storyItems: items,
       controller: controller,
       inline: false,

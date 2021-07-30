@@ -2,8 +2,9 @@ import 'package:chat_app/common/chat_imports.dart';
 import 'package:flutter/material.dart';
 
 class UserProfile extends StatefulWidget {
-  final String? tag, receiverName;
-  const UserProfile({Key? key, required this.tag, this.receiverName})
+  final String? tag, receiverName, imageUrl;
+  const UserProfile(
+      {Key? key, required this.tag, this.receiverName, this.imageUrl})
       : super(key: key);
 
   @override
@@ -75,6 +76,7 @@ class _UserProfileState extends State<UserProfile> {
               width: width,
               tag: widget.tag ?? "",
               userName: widget.receiverName,
+              imageUrl: widget.imageUrl,
             ),
             OtherUserDetails(
               height: height,
@@ -90,14 +92,15 @@ class _UserProfileState extends State<UserProfile> {
 class ProfilePicture extends StatelessWidget {
   final double height, width;
   final Object tag;
-  final String? userName;
-  const ProfilePicture(
-      {Key? key,
-      required this.height,
-      required this.width,
-      required this.tag,
-      this.userName})
-      : super(key: key);
+  final String? userName, imageUrl;
+  const ProfilePicture({
+    Key? key,
+    required this.height,
+    required this.width,
+    required this.tag,
+    this.userName,
+    this.imageUrl,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -114,14 +117,22 @@ class ProfilePicture extends StatelessWidget {
                     builder: (context) => ViewProfileImage(
                       tag: tag.toString(),
                       userNameTag: userName ?? "",
+                      imageUrl: imageUrl ?? "",
                     ),
                   ),
                 );
               },
-              child: Image.asset(
-                AllImages.defaultProfileImage,
-                height: height,
-              ),
+              child: (imageUrl != "")
+                  ? Image.network(
+                      imageUrl ?? "",
+                      height: height,
+                      width: width,
+                      fit: BoxFit.fill,
+                    )
+                  : Image.asset(
+                      AllImages.defaultProfileImage,
+                      height: height,
+                    ),
             ),
           ),
           Positioned(

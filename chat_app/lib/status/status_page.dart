@@ -1,17 +1,18 @@
+import 'dart:async';
+
 import 'package:chat_app/common/chat_imports.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-class StatusViewPage extends StatefulWidget {
+class StatusPage extends StatefulWidget {
   final String? userId, userName;
-  const StatusViewPage({Key? key, this.userId, this.userName})
-      : super(key: key);
+  const StatusPage({Key? key, this.userId, this.userName}) : super(key: key);
 
   @override
-  _StatusViewPageState createState() => _StatusViewPageState();
+  _StatusPageState createState() => _StatusPageState();
 }
 
-class _StatusViewPageState extends State<StatusViewPage> {
+class _StatusPageState extends State<StatusPage> {
   List<UserStatus> status = [];
   List<UserStatus> myStatus = [];
   Map<String, OtherStatus> statuses = {};
@@ -21,15 +22,18 @@ class _StatusViewPageState extends State<StatusViewPage> {
       client: Config.initailizeClient(),
       child: Query(
         options: QueryOptions(document: gql(Queries.getTextStatus)),
-        builder: (result, {refetch, fetchMore}) {
+        builder: (result, {fetchMore, refetch}) {
           if (result.isLoading) {
             return Center(
               child: CircularProgressIndicator(),
             );
           }
+          const oneSec = const Duration(seconds: 20);
+          new Timer.periodic(oneSec, (Timer t) => refetch);
 
           for (int i = 0; i < result.data?['User_status'].length; i++) {
             if (result.data?['User_status'][i]['userId'] == widget.userId) {
+              myStatus.clear();
               myStatus.add(
                 UserStatus(
                     userName: result.data?['User_status'][i]['userName'],
@@ -46,11 +50,11 @@ class _StatusViewPageState extends State<StatusViewPage> {
                     ?.statuses!
                     .add(result.data?['User_status'][i]['textStatus']);
               }
-              status.add(
-                UserStatus(
-                    userName: result.data?['User_status'][i]['userName'],
-                    textMsg: result.data?['User_status'][i]['textStatus']),
-              );
+              // status.add(
+              //   UserStatus(
+              //       userName: result.data?['User_status'][i]['userName'],
+              //       textMsg: result.data?['User_status'][i]['textStatus']),
+              // );
             }
           }
           return Scaffold(
@@ -158,7 +162,7 @@ class _StatusViewPageState extends State<StatusViewPage> {
                                     NetworkImage(AllImages.defaultProfileImage),
                               ),
                               title: Text(
-                                e.value.toString(),
+                                e.value.userName ?? "Default",
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                               subtitle: Text(
@@ -187,36 +191,6 @@ class _StatusViewPageState extends State<StatusViewPage> {
                           )
                           .toList(),
                     ),
-                    // child: ListView(
-                    //   children: List.generate(
-                    //     statuses.length,
-                    //     (index) => ListTile(
-                    // leading: CircleAvatar(
-                    //   radius: 30,
-                    //   backgroundImage:
-                    //       NetworkImage(AllImages.defaultProfileImage),
-                    // ),
-                    // title: Text(
-                    //   status[index].userName ?? "Default",
-                    //   style: TextStyle(fontWeight: FontWeight.bold),
-                    // ),
-                    // subtitle: Text(
-                    //   status[index].textMsg ?? "",
-                    //   style: TextStyle(fontWeight: FontWeight.bold),
-                    // ),
-                    //       onTap: () {
-                    //         Navigator.push(
-                    //           context,
-                    //           MaterialPageRoute(
-                    //             builder: (context) => StoryViewPage(
-                    //               userId: widget.userId,
-                    //             ),
-                    //           ),
-                    //         );
-                    //       },
-                    //     ),
-                    //   ),
-                    // ),
                   ),
                 ),
               ],
@@ -231,8 +205,8 @@ class _StatusViewPageState extends State<StatusViewPage> {
 class UserStatus {
   final String? userName;
   final String? textMsg;
-
-  UserStatus({this.userName, this.textMsg});
+  final String? timeStamp;
+  UserStatus({this.userName, this.textMsg, this.timeStamp});
 }
 
 class OtherStatus {

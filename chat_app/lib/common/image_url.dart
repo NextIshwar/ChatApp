@@ -6,5 +6,5 @@ class AllImages {
   AllImages._();
   static String defaultProfileImage = "assets/images/profile.png";
   static String avatarImage =
-      "kindpng.com/picc/m/22-223863_no-avatar-png-circle-transparent-png.png";
+      "https://static.toiimg.com/thumb/resizemode-4,msid-76729750,imgsize-249247,width-720/76729750.jpg";
 }

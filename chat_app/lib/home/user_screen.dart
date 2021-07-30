@@ -38,6 +38,7 @@ class _UserScreenState extends State<UserScreen>
         extendBody: true,
         backgroundColor: Colors.white,
         appBar: new AppBar(
+          leading: Text(""),
           bottom: TabBar(
             controller: tabController,
             tabs: [
@@ -113,9 +114,11 @@ class _UserScreenState extends State<UserScreen>
                           padding: const EdgeInsets.all(8.0),
                           child: Row(
                             children: <Widget>[
-                              Icon(
-                                Icons.account_circle,
-                                size: 64.0,
+                              CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                    result.data?['User_users_aggregate']
+                                            ['nodes'][index]['profileImage'] ??
+                                        AllImages.avatarImage),
                               ),
                               Expanded(
                                 child: InkWell(
@@ -140,6 +143,11 @@ class _UserScreenState extends State<UserScreen>
                                           senderName: widget.token?[
                                                   userInfo.userName.index] ??
                                               "",
+                                          imageUrl: result.data?[
+                                                          'User_users_aggregate']
+                                                      ['nodes'][index]
+                                                  ['profileImage'] ??
+                                              AllImages.avatarImage,
                                         ),
                                       ),
                                     );
@@ -196,7 +204,7 @@ class _UserScreenState extends State<UserScreen>
                 );
               },
             ),
-            StatusViewPage(
+            StatusPage(
               userId: widget.token?[userInfo.email.index],
               userName: widget.token?[userInfo.userName.index],
             ),
@@ -239,6 +247,17 @@ void _showPopupMenu(BuildContext context, String userName, email) async {
             },
           ),
           value: 'profile'),
+      PopupMenuItem<String>(
+          child: InkWell(
+            child: const Text(
+              'Logout',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            onTap: () {
+              SharedPreference.logout(context);
+            },
+          ),
+          value: 'logout'),
     ],
     elevation: 8.0,
   );

@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 
 class ViewProfileImage extends StatelessWidget {
   final String tag;
-  final String userNameTag;
+  final String userNameTag, imageUrl;
   const ViewProfileImage(
-      {Key? key, required this.tag, required this.userNameTag})
+      {Key? key,
+      required this.tag,
+      required this.userNameTag,
+      this.imageUrl = ""})
       : super(key: key);
 
   @override
@@ -41,7 +44,11 @@ class ViewProfileImage extends StatelessWidget {
       body: Center(
         child: Hero(
           tag: tag,
-          child: Image.asset(AllImages.defaultProfileImage),
+          child: (imageUrl != "")
+              ? Image.network(
+                  imageUrl,
+                )
+              : Image.asset(AllImages.defaultProfileImage),
         ),
       ),
     );

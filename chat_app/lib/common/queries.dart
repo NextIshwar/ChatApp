@@ -87,6 +87,7 @@ class Queries {
     userName
     textStatus
     userId
+    timeStamp
   }
 }
 ''';
@@ -100,8 +101,8 @@ class Queries {
 }
 ''';
   static String sendMsgOnTable1 =
-      r'''mutation sendmsg($channelId:String!,$senderName:String!,$receiverName:String!, $msg:String!){
-  insert_channel_table1(objects:[{channelId:$channelId,senderName:$senderName,receiverName:$receiverName,msg:$msg}]){
+      r'''mutation sendmsg($channelId:String!,$senderName:String!,$receiverName:String!, $msg:String!,$isUrl:Boolean){
+  insert_channel_table1(objects:[{channelId:$channelId,senderName:$senderName,receiverName:$receiverName,msg:$msg,isUrl:$isUrl}]){
     returning{
       id
       msg
@@ -237,6 +238,7 @@ class Queries {
     receiverName
     senderName
     timeStamp
+    isUrl
   }
 }
 ''';

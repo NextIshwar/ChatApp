@@ -1,3 +1,5 @@
+import 'package:chat_app/main.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreference {
@@ -17,6 +19,15 @@ class SharedPreference {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String>? token = prefs.getStringList("token");
     return token;
+  }
+
+  static Future<void> logout(BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove("token");
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => MyApp()),
+    );
   }
 }
 

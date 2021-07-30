@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:chat_app/common/chat_imports.dart';
 import 'package:chat_app/common/graphql_config.dart';
 import 'package:chat_app/common/queries.dart';
@@ -5,12 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 class MessageScreen extends StatelessWidget {
-  final String receiverId, receiverName, chatId, senderName;
-  MessageScreen(
-      {this.receiverId = "",
-      this.receiverName = "",
-      this.chatId = "",
-      this.senderName = ""});
+  final String receiverId, receiverName, chatId, senderName, imageUrl;
+  MessageScreen({
+    this.receiverId = "",
+    this.receiverName = "",
+    this.chatId = "",
+    this.senderName = "",
+    this.imageUrl = "",
+  });
   @override
   Widget build(BuildContext context) {
     final modedValue = (senderName + receiverName).length % 10;
@@ -29,6 +33,7 @@ class MessageScreen extends StatelessWidget {
                 builder: (context) => UserProfile(
                   tag: receiverId,
                   receiverName: receiverName,
+                  imageUrl: imageUrl,
                 ),
               ),
             );
@@ -37,10 +42,16 @@ class MessageScreen extends StatelessWidget {
             children: [
               Hero(
                 tag: receiverId,
-                child: Icon(
-                  Icons.account_circle,
-                  size: 30.0,
-                ),
+                child: (imageUrl != "")
+                    ? CircleAvatar(
+                        radius: 25,
+                        backgroundImage: NetworkImage(
+                          imageUrl,
+                        ))
+                    : Icon(
+                        Icons.account_circle,
+                        size: 30.0,
+                      ),
               ),
               SizedBox(
                 width: 5,
@@ -152,10 +163,16 @@ class _MessageBodyState extends State<MessageBody> {
                                     : Colors.blueGrey,
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: Text(
-                            data[index]['msg'],
-                            style: TextStyle(color: Colors.white),
-                          ),
+                          child: (data[index]['isUrl'] ?? false)
+                              ? Container(
+                                  height: 150,
+                                  width: 150,
+                                  child: Image.network(data[index]['msg']),
+                                )
+                              : Text(
+                                  data[index]['msg'],
+                                  style: TextStyle(color: Colors.white),
+                                ),
                         )
                       ],
                     ),
@@ -179,6 +196,7 @@ class WriteMessage extends StatefulWidget {
 
 class _WriteMessageState extends State<WriteMessage> {
   late TextEditingController msgController;
+  String attachedImageUrl = "";
   @override
   void initState() {
     super.initState();
@@ -216,6 +234,18 @@ class _WriteMessageState extends State<WriteMessage> {
                       child: TextFormField(
                         controller: msgController,
                         decoration: InputDecoration(
+                          suffixIcon: (attachedImageUrl != "")
+                              ? Padding(
+                                  padding: const EdgeInsets.only(
+                                      right: 80.0, top: 10, bottom: 10),
+                                  child: Image.network(
+                                    attachedImageUrl,
+                                    height: 200,
+                                    width: 40,
+                                    fit: BoxFit.cover,
+                                  ),
+                                )
+                              : null,
                           hintText: "Type a message",
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20),
@@ -228,7 +258,11 @@ class _WriteMessageState extends State<WriteMessage> {
                       child: Row(
                         children: [
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              var rng = new Random();
+                              attachedImageUrl = await uploadImage(
+                                  rng.nextInt(100000).toString());
+                            },
                             icon: Icon(Icons.attach_file),
                           ),
                           IconButton(
@@ -246,9 +280,13 @@ class _WriteMessageState extends State<WriteMessage> {
                       "channelId": widget.chatId,
                       "senderName": widget.senderName,
                       "receiverName": widget.receiverName,
-                      "msg": msgController.text
+                      "msg": (attachedImageUrl != "")
+                          ? attachedImageUrl
+                          : msgController.text,
+                      "isUrl": attachedImageUrl != "",
                     });
                     msgController.clear();
+                    attachedImageUrl = "";
                   },
                   icon: Icon(Icons.send),
                 ),

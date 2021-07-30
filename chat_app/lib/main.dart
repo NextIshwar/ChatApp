@@ -1,4 +1,3 @@
-import 'package:chat_app/common/queries.dart';
 import 'package:chat_app/home/user_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
