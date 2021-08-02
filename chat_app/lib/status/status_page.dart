@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:chat_app/common/chat_imports.dart';
+import 'package:chat_app/model/status_model.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
@@ -13,7 +14,6 @@ class StatusPage extends StatefulWidget {
 }
 
 class _StatusPageState extends State<StatusPage> {
-  List<UserStatus> status = [];
   List<UserStatus> myStatus = [];
   Map<String, OtherStatus> statuses = {};
   @override
@@ -30,25 +30,28 @@ class _StatusPageState extends State<StatusPage> {
           }
           const oneSec = const Duration(seconds: 20);
           new Timer.periodic(oneSec, (Timer t) => refetch);
-
-          for (int i = 0; i < result.data?['User_status'].length; i++) {
-            if (result.data?['User_status'][i]['userId'] == widget.userId) {
-              myStatus.clear();
+          Status status = Status.fromJson(result.data ?? {});
+          for (int i = 0; i < status.userStatus!.length; i++) {
+            if (status.userStatus?[i].userId == widget.userId &&
+                status.userStatus!
+                        .where((element) => element.userId == widget.userId)
+                        .length <=
+                    myStatus.length) {
               myStatus.add(
                 UserStatus(
-                    userName: result.data?['User_status'][i]['userName'],
-                    textMsg: result.data?['User_status'][i]['textStatus']),
+                  userName: status.userStatus?[i].userName,
+                  textMsg: status.userStatus?[i].textStatus,
+                ),
               );
             } else {
-              if (!statuses
-                  .containsKey(result.data?['User_status'][i]['userId'])) {
-                statuses[result.data?['User_status'][i]['userId']] =
-                    OtherStatus(result.data?['User_status'][i]['userName'],
-                        [result.data?['User_status'][i]['textStatus']]);
+              if (!statuses.containsKey(status.userStatus?[i].userId)) {
+                statuses[status.userStatus?[i].userId ?? ""] = OtherStatus(
+                    status.userStatus?[i].userName,
+                    [status.userStatus?[i].textStatus ?? ""]);
               } else {
-                statuses[result.data?['User_status'][i]['userId']]
+                statuses[status.userStatus?[i].userId]
                     ?.statuses!
-                    .add(result.data?['User_status'][i]['textStatus']);
+                    .add(status.userStatus?[i].textStatus ?? "");
               }
               // status.add(
               //   UserStatus(

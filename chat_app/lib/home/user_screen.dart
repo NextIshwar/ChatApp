@@ -1,5 +1,6 @@
 import 'package:chat_app/common/chat_imports.dart';
 import 'package:chat_app/common/queries.dart';
+import 'package:chat_app/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
@@ -104,102 +105,94 @@ class _UserScreenState extends State<UserScreen>
                     child: CircularProgressIndicator(),
                   );
                 }
+                UserData userData = UserData.fromJson(result.data ?? {});
                 return Container(
                   height: height,
                   width: width,
                   child: ListView.builder(
-                    itemBuilder: (context, index) => Column(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: <Widget>[
-                              CircleAvatar(
-                                backgroundImage: NetworkImage(
-                                    result.data?['User_users_aggregate']
-                                            ['nodes'][index]['profileImage'] ??
-                                        AllImages.avatarImage),
-                              ),
-                              Expanded(
-                                child: InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => MessageScreen(
-                                          receiverId: result
-                                                  .data?['User_users_aggregate']
-                                              ['nodes'][index]['id'],
-                                          receiverName: result
-                                                  .data?['User_users_aggregate']
-                                              ['nodes'][index]['name'],
-                                          chatId: getChannelId(
-                                            widget.token?[
-                                                    userInfo.email.index] ??
+                    itemBuilder: (context, index) {
+                      var data = userData.userUsersAggregate!.nodes?[index];
+                      return Column(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: <Widget>[
+                                CircleAvatar(
+                                  backgroundImage: NetworkImage(
+                                      data!.profileImage ??
+                                          AllImages.avatarImage),
+                                ),
+                                Expanded(
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => MessageScreen(
+                                            receiverId: data.id ?? "",
+                                            receiverName: data.name ?? "",
+                                            chatId: getChannelId(
+                                              widget.token?[
+                                                      userInfo.email.index] ??
+                                                  "",
+                                              data.email,
+                                            ),
+                                            senderName: widget.token?[
+                                                    userInfo.userName.index] ??
                                                 "",
-                                            result.data?['User_users_aggregate']
-                                                ['nodes'][index]['email'],
+                                            imageUrl: data.profileImage ??
+                                                AllImages.avatarImage,
                                           ),
-                                          senderName: widget.token?[
-                                                  userInfo.userName.index] ??
-                                              "",
-                                          imageUrl: result.data?[
-                                                          'User_users_aggregate']
-                                                      ['nodes'][index]
-                                                  ['profileImage'] ??
-                                              AllImages.avatarImage,
                                         ),
+                                      );
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: <Widget>[
+                                              Text(
+                                                data.name ?? "",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 20.0),
+                                              ),
+                                              Text(
+                                                "18/06/2021",
+                                                style: TextStyle(
+                                                    color: Colors.black45),
+                                              ),
+                                            ],
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 2.0),
+                                            child: Text(
+                                              "Hi There",
+                                              style: TextStyle(
+                                                  color: Colors.black45,
+                                                  fontSize: 16.0),
+                                            ),
+                                          )
+                                        ],
                                       ),
-                                    );
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            Text(
-                                              result.data?[
-                                                      'User_users_aggregate']
-                                                  ['nodes'][index]['name'],
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 20.0),
-                                            ),
-                                            Text(
-                                              "18/06/2021",
-                                              style: TextStyle(
-                                                  color: Colors.black45),
-                                            ),
-                                          ],
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 2.0),
-                                          child: Text(
-                                            "Hi There",
-                                            style: TextStyle(
-                                                color: Colors.black45,
-                                                fontSize: 16.0),
-                                          ),
-                                        )
-                                      ],
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        Divider(),
-                      ],
-                    ),
-                    itemCount:
-                        result.data?['User_users_aggregate']['nodes'].length,
+                          Divider(),
+                        ],
+                      );
+                    },
+                    itemCount: userData.userUsersAggregate!.nodes!.length,
                   ),
                 );
               },
