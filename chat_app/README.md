@@ -18,57 +18,39 @@ samples, guidance on mobile development, and a full API reference.
 ## Project Structure
 
 ```
-.
-├── android
-│   ├── app
-│   │   └── src
-│   │       ├── debug
-│   │       ├── main
-│   │       │   ├── java
-│   │       │   │   ├── com
-│   │       │   │   │   └── example
-│   │       │   │   │       └── chat_app
-│   │       │   │   └── io
-│   │       │   │       └── flutter
-│   │       │   │           └── plugins
-│   │       │   └── res
-│   │       │       ├── drawable
-│   │       │       ├── drawable-v21
-│   │       │       ├── mipmap-hdpi
-│   │       │       ├── mipmap-mdpi
-│   │       │       ├── mipmap-xhdpi
-│   │       │       ├── mipmap-xxhdpi
-│   │       │       ├── mipmap-xxxhdpi
-│   │       │       ├── values
-│   │       │       └── values-night
-│   │       └── profile
-│   └── gradle
-│       └── wrapper
-├── assets
-│   └── images
-├── ios
-│   ├── Flutter
-│   ├── Runner
-│   │   ├── Assets.xcassets
-│   │   │   ├── AppIcon.appiconset
-│   │   │   └── LaunchImage.imageset
-│   │   └── Base.lproj
-│   ├── Runner.xcodeproj
-│   │   ├── project.xcworkspace
-│   │   │   └── xcshareddata
-│   │   └── xcshareddata
-│   │       └── xcschemes
-│   └── Runner.xcworkspace
-│       └── xcshareddata
-├── lib
-│   ├── common
-│   ├── home
-│   ├── login
-│   ├── message_screen
-│   ├── model
-│   ├── profile
-│   └── status
-├── test
-└── web
-    └── icon
+lib
+├── common
+│   ├── chat_imports.dart
+│   ├── colors.dart
+│   ├── constants.dart
+│   ├── graphql_config.dart
+│   ├── image_url.dart
+│   ├── loader.dart
+│   ├── queries.dart
+│   ├── shared_preferences.dart
+│   └── upload_image.dart
+├── generated_plugin_registrant.dart
+├── home
+│   └── user_screen.dart
+├── login
+│   ├── google_sign_in.dart
+│   ├── login.dart
+│   └── signup.dart
+├── main.dart
+├── message_screen
+│   └── message_screen.dart
+├── model
+│   ├── status_model.dart
+│   └── user_model.dart
+├── profile
+│   ├── custom_text_widget.dart
+│   ├── media_file_widget.dart
+│   ├── my_profile.dart
+│   ├── other_user_details.dart
+│   ├── profile.dart
+│   └── view_profile_image.dart
+└── status
+    ├── add_status_page.dart
+    ├── my_status_page.dart
+    └── status_page.dart
 ```
